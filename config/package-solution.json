@@ -6,7 +6,6 @@
     "version": "1.0.0.0",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
-    "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHRleHQgeD0iMiIgeT0iMzQiIGZvbnQtc2l6ZT0iMzQiIGZvbnQtZmFtaWx5PSJTZWdvZSBVSSBFbW9qaSxBcHBsZSBDb2xvciBFbW9qaSxOb3RvIENvbG9yIEVtb2ppLHNhbnMtc2VyaWYiPvCfpo88L3RleHQ+PC9zdmc+",
     "developer": {
       "name": "Kachihro",
       "websiteUrl": "",
