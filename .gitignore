@@ -1,0 +1,8 @@
+node_modules/
+dist/
+lib/
+release/
+temp/
+sharepoint/solution/
+*.tgz
+.DS_Store

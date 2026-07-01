@@ -1,0 +1,49 @@
+.gridContainer {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.toolbar {
+  border-bottom: 1px solid #edebe9;
+}
+
+.listContainer {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.loadingOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: 10;
+}
+
+.emptyState {
+  padding: 40px 24px;
+  text-align: center;
+  color: #605e5c;
+}
+
+.errorState {
+  padding: 8px 16px;
+}
+
+.loadMoreContainer {
+  padding: 12px 24px;
+  text-align: center;
+  border-top: 1px solid #edebe9;
+}
+
+.boolTrue {
+  color: #107c10;
+}
+
+.boolFalse {
+  color: #a4262c;
+}

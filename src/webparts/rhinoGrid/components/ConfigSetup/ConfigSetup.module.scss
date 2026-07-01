@@ -1,0 +1,94 @@
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 32px;
+  background: #ffffff;
+  border: 1px solid #edebe9;
+  border-radius: 4px;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.uploadArea {
+  border: 2px dashed #c8c6c4;
+  border-radius: 4px;
+  padding: 32px;
+  text-align: center;
+  margin-bottom: 24px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+
+  &:hover {
+    border-color: #0078d4;
+    background: #f0f8ff;
+  }
+}
+
+.uploadIcon {
+  font-size: 32px;
+  color: #0078d4;
+  margin-bottom: 8px;
+}
+
+.fileInput {
+  display: none;
+}
+
+.previewTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  font-size: 13px;
+
+  th {
+    background: #f3f2f1;
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #edebe9;
+  }
+
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #edebe9;
+    vertical-align: top;
+  }
+
+  tr:hover td {
+    background: #faf9f8;
+  }
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #e1dfdd;
+  color: #323130;
+
+  &.required {
+    background: #a4262c;
+    color: #ffffff;
+  }
+
+  &.filterable {
+    background: #107c10;
+    color: #ffffff;
+    margin-left: 4px;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  align-items: center;
+}
+
+.provisionStatus {
+  margin-top: 16px;
+}

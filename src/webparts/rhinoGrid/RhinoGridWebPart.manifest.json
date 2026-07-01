@@ -1,0 +1,25 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "e82d52e3-e3c4-42c1-acb0-594912f5619c",
+  "alias": "RhinoGridWebPart",
+  "componentType": "WebPart",
+
+  "version": "*",
+  "manifestVersion": 2,
+
+  "requiresCustomScript": false,
+  "supportedHosts": ["SharePointFullPage", "SharePointWebPart"],
+  "supportsThemeVariants": true,
+
+  "preconfiguredEntries": [{
+    "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+    "group": { "default": "Advanced" },
+    "title": { "default": "Rhino Grid" },
+    "description": { "default": "Configurable full-page data grid with SharePoint list auto-provisioning" },
+    "officeFabricIconFontName": "GridViewSmall",
+    "properties": {
+      "gridConfigJson": "",
+      "listName": ""
+    }
+  }]
+}

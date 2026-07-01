@@ -1,0 +1,44 @@
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+  padding: 12px 16px;
+  background: #f3f2f1;
+  border-bottom: 1px solid #edebe9;
+  margin-bottom: 0;
+}
+
+.filterField {
+  min-width: 160px;
+  max-width: 220px;
+  flex: 1 1 160px;
+}
+
+.dateRangeField {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  flex: 2 1 300px;
+  min-width: 280px;
+}
+
+.numberRangeField {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  flex: 2 1 260px;
+  min-width: 240px;
+}
+
+.filterLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #323130;
+  margin-bottom: 4px;
+}
+
+.clearButton {
+  align-self: flex-end;
+  margin-left: auto;
+}

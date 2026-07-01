@@ -1,0 +1,31 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "rhino-forms-client-side-solution",
+    "id": "2d6aac02-e567-4fe7-8fc4-d227ab69d798",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.21.1"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "Configurable full-page data grid with SharePoint list auto-provisioning"
+      },
+      "longDescription": {
+        "default": "Configurable full-page data grid with SharePoint list auto-provisioning"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    }
+  },
+  "paths": {
+    "zippedPackage": "solution/rhino-forms.sppkg"
+  }
+}
