@@ -6,7 +6,7 @@
     "version": "1.0.0.0",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
-    "iconPath": "rhino-icon.svg",
+    "iconPath": "rhino-icon.png",
     "developer": {
       "name": "Kachihro",
       "websiteUrl": "",
@@ -16,7 +16,7 @@
     },
     "metadata": {
       "shortDescription": {
-        "default": "🦏 Schema-driven full-page data grid with automatic SharePoint list provisioning"
+        "default": "Schema-driven full-page data grid with automatic SharePoint list provisioning"
       },
       "longDescription": {
         "default": "Rhino Forms provides a configurable, full-page data grid for SharePoint Online. Upload a JSON config file to define your columns, and the app automatically provisions the backing SharePoint list. Supports filtering, sorting, and full CRUD operations."
