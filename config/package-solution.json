@@ -3,7 +3,7 @@
   "solution": {
     "name": "Rhino Forms",
     "id": "2d6aac02-e567-4fe7-8fc4-d227ab69d798",
-    "version": "1.0.1.0",
+    "version": "1.1.0.0",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
     "iconPath": "rhino-icon.png",

@@ -15,6 +15,8 @@ export interface IFieldDefinition {
 export interface IGridConfig {
   listName: string;
   listDescription?: string;
+  icon?: string;
+  itemLabel?: string;
   fields: IFieldDefinition[];
 }
 
