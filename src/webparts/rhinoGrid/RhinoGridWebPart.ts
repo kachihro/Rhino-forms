@@ -36,6 +36,10 @@ export default class RhinoGridWebPart extends BaseClientSideWebPart<IRhinoGridWe
     return true;
   }
 
+  protected get isFullBleed(): boolean {
+    return true;
+  }
+
   public render(): void {
     let config: IGridConfig | undefined;
     try {

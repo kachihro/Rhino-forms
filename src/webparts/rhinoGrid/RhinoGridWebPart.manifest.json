@@ -9,6 +9,7 @@
 
   "requiresCustomScript": false,
   "supportedHosts": ["SharePointFullPage", "SharePointWebPart"],
+  "supportsFullBleed": true,
   "supportsThemeVariants": true,
 
   "preconfiguredEntries": [{
