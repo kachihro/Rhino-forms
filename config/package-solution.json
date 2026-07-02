@@ -6,6 +6,7 @@
     "version": "1.0.0.0",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
+    "iconPath": "rhino-icon.svg",
     "developer": {
       "name": "Kachihro",
       "websiteUrl": "",
