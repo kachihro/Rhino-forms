@@ -2,7 +2,7 @@
   "@microsoft/generator-sharepoint": {
     "isCreatingSolution": true,
     "environment": "spo",
-    "version": "1.21.1",
+    "version": "1.23.2",
     "libraryName": "rhino-forms",
     "libraryId": "2d6aac02-e567-4fe7-8fc4-d227ab69d798",
     "packageManager": "npm",
