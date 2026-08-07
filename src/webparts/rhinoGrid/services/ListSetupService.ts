@@ -53,45 +53,56 @@ export class ListSetupService {
 
   private async addFieldAsXml(listName: string, field: IFieldDefinition): Promise<void> {
     const required = field.required ? 'TRUE' : 'FALSE';
-    const displayName = this.escapeXml(field.displayName);
     const name = this.escapeXml(field.internalName);
     let schemaXml = '';
 
     switch (field.type) {
       case 'Text':
-        schemaXml = `<Field Type="Text" Name="${name}" StaticName="${name}" DisplayName="${displayName}" MaxLength="${field.maxLength || 255}" Required="${required}"/>`;
+        schemaXml = `<Field Type="Text" Name="${name}" StaticName="${name}" DisplayName="${name}" MaxLength="${field.maxLength || 255}" Required="${required}"/>`;
         break;
       case 'Note':
-        schemaXml = `<Field Type="Note" Name="${name}" StaticName="${name}" DisplayName="${displayName}" NumLines="6" RichText="FALSE" Required="${required}"/>`;
+        schemaXml = `<Field Type="Note" Name="${name}" StaticName="${name}" DisplayName="${name}" NumLines="6" RichText="FALSE" Required="${required}"/>`;
         break;
       case 'Choice': {
         const choices = (field.choices || []).map(c => `<CHOICE>${this.escapeXml(c)}</CHOICE>`).join('');
-        schemaXml = `<Field Type="Choice" Name="${name}" StaticName="${name}" DisplayName="${displayName}" Required="${required}" Format="Dropdown"><CHOICES>${choices}</CHOICES></Field>`;
+        schemaXml = `<Field Type="Choice" Name="${name}" StaticName="${name}" DisplayName="${name}" Required="${required}" Format="Dropdown"><CHOICES>${choices}</CHOICES></Field>`;
         break;
       }
       case 'DateTime':
-        schemaXml = `<Field Type="DateTime" Name="${name}" StaticName="${name}" DisplayName="${displayName}" Required="${required}" Format="DateOnly"/>`;
+        schemaXml = `<Field Type="DateTime" Name="${name}" StaticName="${name}" DisplayName="${name}" Required="${required}" Format="DateOnly"/>`;
         break;
       case 'Number':
-        schemaXml = `<Field Type="Number" Name="${name}" StaticName="${name}" DisplayName="${displayName}" Required="${required}"/>`;
+        schemaXml = `<Field Type="Number" Name="${name}" StaticName="${name}" DisplayName="${name}" Required="${required}"/>`;
         break;
       case 'Boolean':
-        schemaXml = `<Field Type="Boolean" Name="${name}" StaticName="${name}" DisplayName="${displayName}"><Default>0</Default></Field>`;
+        schemaXml = `<Field Type="Boolean" Name="${name}" StaticName="${name}" DisplayName="${name}"><Default>0</Default></Field>`;
         break;
       case 'User':
-        schemaXml = `<Field Type="User" Name="${name}" StaticName="${name}" DisplayName="${displayName}" Required="${required}" UserSelectionMode="0"/>`;
+        schemaXml = `<Field Type="User" Name="${name}" StaticName="${name}" DisplayName="${name}" Required="${required}" UserSelectionMode="0"/>`;
         break;
       case 'URL':
-        schemaXml = `<Field Type="URL" Name="${name}" StaticName="${name}" DisplayName="${displayName}" Required="${required}" Format="Hyperlink"/>`;
+        schemaXml = `<Field Type="URL" Name="${name}" StaticName="${name}" DisplayName="${name}" Required="${required}" Format="Hyperlink"/>`;
         break;
       default:
-        schemaXml = `<Field Type="Text" Name="${name}" StaticName="${name}" DisplayName="${displayName}" MaxLength="255" Required="${required}"/>`;
+        schemaXml = `<Field Type="Text" Name="${name}" StaticName="${name}" DisplayName="${name}" MaxLength="255" Required="${required}"/>`;
     }
 
     await this.sp.web.lists
       .getByTitle(listName)
       .fields
       .createFieldAsXml(schemaXml);
+
+    // Set the real human-readable display name after creation.
+    // SharePoint derives InternalName from DisplayName in createFieldAsXml, so we
+    // use internalName as the temporary DisplayName above to prevent space-encoding
+    // (e.g. "Due Date" → "Due_x0020_Date"), then patch the Title here.
+    if (field.displayName !== field.internalName) {
+      await this.sp.web.lists
+        .getByTitle(listName)
+        .fields
+        .getByInternalNameOrTitle(field.internalName)
+        .update({ Title: field.displayName });
+    }
   }
 
   private escapeXml(value: string): string {

@@ -1,13 +1,14 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "rhino-forms-client-side-solution",
+    "name": "Rhino Forms",
     "id": "2d6aac02-e567-4fe7-8fc4-d227ab69d798",
-    "version": "1.0.0.0",
+    "version": "1.1.0.0",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
+    "iconPath": "rhino-icon.png",
     "developer": {
-      "name": "",
+      "name": "Kachihro",
       "websiteUrl": "",
       "privacyUrl": "",
       "termsOfUseUrl": "",
@@ -15,10 +16,10 @@
     },
     "metadata": {
       "shortDescription": {
-        "default": "Configurable full-page data grid with SharePoint list auto-provisioning"
+        "default": "Schema-driven full-page data grid with automatic SharePoint list provisioning"
       },
       "longDescription": {
-        "default": "Configurable full-page data grid with SharePoint list auto-provisioning"
+        "default": "Rhino Forms provides a configurable, full-page data grid for SharePoint Online. Upload a JSON config file to define your columns, and the app automatically provisions the backing SharePoint list. Supports filtering, sorting, and full CRUD operations."
       },
       "screenshotPaths": [],
       "videoUrl": "",

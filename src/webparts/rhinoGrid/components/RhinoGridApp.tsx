@@ -117,6 +117,16 @@ const RhinoGridApp: React.FC<IRhinoGridAppProps> = ({ sp, config, displayMode, o
     onConfigSaved(json, listName);
   };
 
+  const handleEditItem = (item: IGridItem): void => {
+    setSelectedItem(item);
+    setFormMode('edit');
+  };
+
+  const handleDeleteItem = (item: IGridItem): void => {
+    setSelectedItem(item);
+    setShowDeleteDialog(true);
+  };
+
   const handleDeleteConfirm = async (): Promise<void> => {
     if (!selectedItem || !config || !dataService) return;
     try {
@@ -153,11 +163,7 @@ const RhinoGridApp: React.FC<IRhinoGridAppProps> = ({ sp, config, displayMode, o
     }
     return (
       <div className={styles.appContainer}>
-        <ConfigSetup
-          sp={sp}
-          setupService={setupService}
-          onConfigSaved={handleConfigSaved}
-        />
+        <ConfigSetup sp={sp} setupService={setupService} onConfigSaved={handleConfigSaved} />
       </div>
     );
   }
@@ -176,38 +182,46 @@ const RhinoGridApp: React.FC<IRhinoGridAppProps> = ({ sp, config, displayMode, o
     }
     return (
       <div className={styles.appContainer}>
-        <ConfigSetup
-          sp={sp}
-          setupService={setupService}
-          existingConfig={config}
-          onConfigSaved={handleConfigSaved}
-        />
+        <ConfigSetup sp={sp} setupService={setupService} existingConfig={config} onConfigSaved={handleConfigSaved} />
       </div>
     );
   }
 
+  const itemLabel = config.itemLabel || 'item';
+
   return (
     <div className={styles.appContainer}>
-      <FilterBar
-        fields={config.fields}
-        filterState={filterState}
-        onFilterChange={handleFilterChange}
-      />
-      <div className={styles.gridWrapper}>
+      <div className={styles.card}>
+        <div className={styles.header}>
+          <div className={styles.headerIcon}>{config.icon || '🦏'}</div>
+          <div className={styles.headerText}>
+            <div className={styles.headerTitle}>{config.listName}</div>
+            {config.listDescription && (
+              <div className={styles.headerSubtitle}>{config.listDescription}</div>
+            )}
+          </div>
+        </div>
+
         <DataGrid
           items={items}
           fields={config.fields}
           loading={loading}
           error={error}
-          selectedItem={selectedItem}
-          onSelectionChange={setSelectedItem}
           onSort={handleSort}
           onAdd={() => { setSelectedItem(undefined); setFormMode('add'); }}
-          onEdit={() => { if (selectedItem) setFormMode('edit'); }}
-          onDelete={() => { if (selectedItem) setShowDeleteDialog(true); }}
+          onEditItem={handleEditItem}
+          onDeleteItem={handleDeleteItem}
           onRefresh={handleRefresh}
           hasMore={hasMore}
           onLoadMore={handleLoadMore}
+          itemLabel={itemLabel}
+          filterBar={
+            <FilterBar
+              fields={config.fields}
+              filterState={filterState}
+              onFilterChange={handleFilterChange}
+            />
+          }
         />
       </div>
 
