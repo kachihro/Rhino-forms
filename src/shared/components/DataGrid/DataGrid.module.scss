@@ -1,0 +1,191 @@
+.gridContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 1px solid #efefef;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.toolbarLeft {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.toolbarRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.newBtn {
+  border-radius: 6px;
+  font-weight: 600;
+  margin-right: 8px;
+  background: var(--rhinoAccent, #0f6cbd);
+  border-color: var(--rhinoAccent, #0f6cbd);
+
+  &:hover {
+    filter: brightness(0.92);
+    background: var(--rhinoAccent, #0f6cbd);
+    border-color: var(--rhinoAccent, #0f6cbd);
+  }
+}
+
+.searchBox {
+  width: 240px;
+  border-radius: 6px;
+}
+
+.filterRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 20px;
+  background: #fafafa;
+  border-bottom: 1px solid #efefef;
+  gap: 12px;
+  min-height: 44px;
+}
+
+.filterSlot {
+  flex: 1;
+  min-width: 0;
+}
+
+.countText {
+  font-size: 12px;
+  color: #616161;
+  white-space: nowrap;
+  padding: 2px 10px;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+}
+
+.errorBar {
+  margin: 0;
+}
+
+.listContainer {
+  flex: 1;
+  position: relative;
+  min-height: 160px;
+}
+
+.loadingOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: 10;
+}
+
+.emptyState {
+  padding: 64px 24px;
+  text-align: center;
+  color: #616161;
+}
+
+.emptyIcon {
+  font-size: 40px;
+  color: #c8c6c4;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.emptyTitle {
+  display: block;
+  color: #242424;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.emptySubtitle {
+  display: block;
+  color: #616161;
+}
+
+.sortableHeader {
+  cursor: pointer;
+}
+
+.staticHeader {
+  cursor: default;
+}
+
+.alignRight :global(.ms-DetailsRow-cell) {
+  text-align: right;
+}
+
+.alignCenter :global(.ms-DetailsRow-cell) {
+  text-align: center;
+}
+
+.clickableRow {
+  cursor: pointer;
+}
+
+.comfortableRow {
+  min-height: 46px;
+
+  :global(.ms-DetailsRow-cell) {
+    display: flex;
+    align-items: center;
+    min-height: 46px;
+    font-size: 13px;
+  }
+}
+
+.compactRow {
+  :global(.ms-DetailsRow-cell) {
+    font-size: 12.5px;
+  }
+}
+
+.rowActions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+
+:global(.ms-DetailsRow:hover) .rowActions,
+:global(.ms-DetailsRow:focus-within) .rowActions {
+  opacity: 1;
+}
+
+.rowActionBtn {
+  color: #616161;
+  width: 28px;
+  height: 28px;
+
+  &:hover {
+    color: var(--rhinoAccent, #0f6cbd);
+    background: #f3f3f3;
+  }
+}
+
+.deleteMenuItem {
+  color: #a4262c !important;
+}
+
+.loadMore {
+  padding: 12px 20px;
+  text-align: center;
+  border-top: 1px solid #efefef;
+}

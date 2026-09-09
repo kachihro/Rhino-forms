@@ -6,3 +6,5 @@ temp/
 sharepoint/solution/
 *.tgz
 .DS_Store
+*.scss.ts
+.heft/

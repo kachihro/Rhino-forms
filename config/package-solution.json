@@ -3,7 +3,7 @@
   "solution": {
     "name": "Rhino Forms",
     "id": "2d6aac02-e567-4fe7-8fc4-d227ab69d798",
-    "version": "1.1.0.0",
+    "version": "2.0.0.0",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
     "iconPath": "rhino-icon.png",
@@ -16,10 +16,10 @@
     },
     "metadata": {
       "shortDescription": {
-        "default": "Schema-driven full-page data grid with automatic SharePoint list provisioning"
+        "default": "Config-driven SharePoint list view, edit form and list designer"
       },
       "longDescription": {
-        "default": "Rhino Forms provides a configurable, full-page data grid for SharePoint Online. Upload a JSON config file to define your columns, and the app automatically provisions the backing SharePoint list. Supports filtering, sorting, and full CRUD operations."
+        "default": "Rhino Forms replaces PowerApps-style list forms with two web parts: the Rhino List Designer defines a list (with proper internal names), provisions it, lays out the form and configures the grid, saving a JSON config to Site Assets. The Rhino List web part reads that config and renders a fast, filterable, sortable grid with a beautiful add/edit form."
       },
       "screenshotPaths": [],
       "videoUrl": "",

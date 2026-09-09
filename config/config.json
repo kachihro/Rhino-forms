@@ -9,10 +9,19 @@
           "manifest": "./src/webparts/rhinoGrid/RhinoGridWebPart.manifest.json"
         }
       ]
+    },
+    "rhino-designer-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/rhinoDesigner/RhinoDesignerWebPart.js",
+          "manifest": "./src/webparts/rhinoDesigner/RhinoDesignerWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
   "localizedResources": {
-    "RhinoGridWebPartStrings": "lib/webparts/rhinoGrid/loc/{locale}.js"
+    "RhinoGridWebPartStrings": "lib/webparts/rhinoGrid/loc/{locale}.js",
+    "RhinoDesignerWebPartStrings": "lib/webparts/rhinoDesigner/loc/{locale}.js"
   }
 }

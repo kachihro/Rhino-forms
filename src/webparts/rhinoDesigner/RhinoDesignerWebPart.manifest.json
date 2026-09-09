@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-  "id": "e82d52e3-e3c4-42c1-acb0-594912f5619c",
-  "alias": "RhinoGridWebPart",
+  "id": "7b1f3c2a-9d4e-4c8b-a1f6-2e5d8c9b0a41",
+  "alias": "RhinoDesignerWebPart",
   "componentType": "WebPart",
   "version": "*",
   "manifestVersion": 2,
@@ -19,18 +19,14 @@
         "default": "Advanced"
       },
       "title": {
-        "default": "Rhino List"
+        "default": "Rhino List Designer"
       },
       "description": {
-        "default": "Config-driven SharePoint list view and edit form. Point it at a JSON config created with the Rhino List Designer."
+        "default": "Define a list, provision it with proper internal names, lay out the form and configure the grid. Saves a JSON config the Rhino List web part reads."
       },
       "iconImageUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHRleHQgeD0iMiIgeT0iMzQiIGZvbnQtc2l6ZT0iMzQiIGZvbnQtZmFtaWx5PSJTZWdvZSBVSSBFbW9qaSxBcHBsZSBDb2xvciBFbW9qaSxOb3RvIENvbG9yIEVtb2ppLHNhbnMtc2VyaWYiPvCfpo88L3RleHQ+PC9zdmc+",
       "properties": {
-        "configSource": "file",
-        "configFileUrl": "",
-        "gridConfigJson": "",
-        "hideHeader": false,
-        "listName": ""
+        "lastConfigFileUrl": ""
       }
     }
   ]
