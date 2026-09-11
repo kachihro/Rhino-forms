@@ -94,6 +94,13 @@ npx gulp package-solution --ship
 # Upload sharepoint/solution/rhino-forms.sppkg to the App Catalog, then add "Rhino Forms" to the site.
 ```
 
+One-shot deploy to a tenant (App Catalog upload, tenant deploy, site install, sample config, Designer and List pages):
+
+```powershell
+Install-Module PnP.PowerShell -Scope CurrentUser
+./deploy/Deploy-RhinoForms.ps1 -SiteUrl https://<tenant>.sharepoint.com
+```
+
 Local workbench:
 
 ```powershell
