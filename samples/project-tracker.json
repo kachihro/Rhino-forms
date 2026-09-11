@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 2,
+  "list": {
+    "title": "Project Tracker",
+    "internalName": "ProjectTracker",
+    "description": "Tracks projects and assignments"
+  },
+  "branding": {
+    "title": "Project Tracker",
+    "subtitle": "All active and archived projects",
+    "icon": "🦏",
+    "accent": "#0f6cbd",
+    "itemLabel": "project",
+    "itemLabelPlural": "projects"
+  },
+  "fields": [
+    { "internalName": "Title", "displayName": "Project Name", "type": "Text", "required": true, "description": "Short, unique project name" },
+    { "internalName": "Status", "displayName": "Status", "type": "Choice", "required": true, "choices": ["Not Started", "In Progress", "On Hold", "Complete"], "defaultValue": "Not Started" },
+    { "internalName": "Priority", "displayName": "Priority", "type": "Choice", "choices": ["High", "Medium", "Low"], "defaultValue": "Medium" },
+    { "internalName": "Owner", "displayName": "Owner", "type": "User" },
+    { "internalName": "DueDate", "displayName": "Due Date", "type": "DateTime", "dateOnly": true },
+    { "internalName": "Budget", "displayName": "Budget", "type": "Number", "numberFormat": "currency", "decimals": 2 },
+    { "internalName": "Tags", "displayName": "Tags", "type": "MultiChoice", "choices": ["Finance", "Operations", "IT", "HR"] },
+    { "internalName": "IsBillable", "displayName": "Billable", "type": "Boolean", "defaultValue": true },
+    { "internalName": "Notes", "displayName": "Notes", "type": "Note" }
+  ],
+  "form": {
+    "surface": "panel",
+    "size": "medium",
+    "showSystemInfo": true,
+    "addTitle": "New {item}",
+    "editTitle": "Edit {Title}",
+    "sections": [
+      {
+        "id": "details", "title": "Details", "columns": 2,
+        "fields": [
+          { "field": "Title", "width": "full", "placeholder": "e.g. Website refresh" },
+          { "field": "Status", "width": "half" },
+          { "field": "Priority", "width": "half" },
+          { "field": "Owner", "width": "half" },
+          { "field": "DueDate", "width": "half" }
+        ]
+      },
+      {
+        "id": "finance", "title": "Finance & tags", "columns": 2,
+        "fields": [
+          { "field": "Budget", "width": "half" },
+          { "field": "IsBillable", "width": "half" },
+          { "field": "Tags", "width": "full" }
+        ]
+      },
+      {
+        "id": "notes", "title": "Notes", "columns": 1, "collapsible": true,
+        "fields": [{ "field": "Notes", "width": "full" }]
+      }
+    ]
+  },
+  "grid": {
+    "columns": [
+      { "field": "Title", "width": 200, "sortable": true, "filterable": true },
+      { "field": "Status", "width": 130, "sortable": true, "filterable": true, "render": "badge",
+        "badgeTones": { "Not Started": "neutral", "In Progress": "warning", "On Hold": "neutral", "Complete": "success" } },
+      { "field": "Priority", "width": 110, "sortable": true, "filterable": true, "render": "badge" },
+      { "field": "Owner", "width": 170, "sortable": true, "filterable": true },
+      { "field": "DueDate", "width": 120, "sortable": true, "filterable": true },
+      { "field": "Budget", "width": 110, "sortable": true, "filterable": true, "align": "right" },
+      { "field": "Tags", "width": 180, "filterable": true },
+      { "field": "IsBillable", "width": 80, "sortable": true, "filterable": true }
+    ],
+    "defaultSort": { "field": "DueDate", "direction": "asc" },
+    "pageSize": 50,
+    "allowSearch": true,
+    "allowFilter": true,
+    "allowSort": true,
+    "allowExport": true,
+    "allowAdd": true,
+    "allowEdit": true,
+    "allowDelete": true,
+    "allowColumnResize": true,
+    "density": "comfortable",
+    "rowClick": "edit",
+    "showCount": true
+  }
+}

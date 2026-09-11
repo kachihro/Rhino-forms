@@ -1,0 +1,62 @@
+.help {
+  display: block;
+  color: #616161;
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+.error {
+  display: block;
+  color: #a4262c;
+  margin-top: 5px;
+}
+
+.readOnly {
+  display: flex;
+  flex-direction: column;
+}
+
+.readOnlyValue {
+  min-height: 32px;
+  padding: 6px 0;
+  font-size: 14px;
+  color: #242424;
+  border-bottom: 1px dashed #e0e0e0;
+}
+
+.empty {
+  color: #a19f9d;
+}
+
+.multiline {
+  white-space: pre-wrap;
+  line-height: 1.45;
+}
+
+.personaList,
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.inlineChoice {
+  :global(.ms-ChoiceFieldGroup-flexContainer) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 18px;
+  }
+}
+
+.toggleWrap {
+  padding-top: 2px;
+}
+
+.timeField {
+  margin-top: 6px;
+  max-width: 140px;
+}
+
+.urlDesc {
+  margin-top: 6px;
+}

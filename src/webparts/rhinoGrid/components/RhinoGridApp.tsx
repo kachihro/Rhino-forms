@@ -1,251 +1,129 @@
 import * as React from 'react';
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { MessageBar, MessageBarType } from '@fluentui/react';
+import { useState, useEffect } from 'react';
+import { MessageBar, MessageBarType, Spinner, SpinnerSize, PrimaryButton, DefaultButton, Icon, Text, Link } from '@fluentui/react';
 import { SPFI } from '@pnp/sp';
 import { DisplayMode } from '@microsoft/sp-core-library';
-import { IGridConfig, IFilterState, IGridItem } from '../types/IFieldConfig';
-import { GridDataService } from '../services/GridDataService';
-import { ListSetupService } from '../services/ListSetupService';
-import ConfigSetup from './ConfigSetup/ConfigSetup';
-import DataGrid from './DataGrid/DataGrid';
-import FilterBar from './FilterBar/FilterBar';
-import ItemForm from './ItemForm/ItemForm';
-import DeleteConfirmDialog from './DeleteConfirmDialog/DeleteConfirmDialog';
+import { IRhinoConfig } from '../../../shared/types/RhinoConfig';
+import { parseConfig } from '../../../shared/config/normalize';
+import { ConfigStore, IStoredConfig } from '../../../shared/services/ConfigStore';
+import RhinoList from '../../../shared/components/RhinoList/RhinoList';
+import type { ConfigSource } from '../RhinoGridWebPart';
 import styles from './RhinoGridApp.module.scss';
 
 export interface IRhinoGridAppProps {
   sp: SPFI;
-  config: IGridConfig | undefined;
+  store: ConfigStore;
+  configSource: ConfigSource;
+  configFileUrl: string;
+  inlineJson: string;
+  hideHeader: boolean;
   displayMode: DisplayMode;
-  onConfigSaved: (json: string, listName: string) => void;
+  designerUrl: string;
+  onOpenPropertyPane: () => void;
+  onPickConfigFile: (url: string) => void;
 }
 
-const PAGE_SIZE = 100;
+type LoadState =
+  | { kind: 'idle' }
+  | { kind: 'loading' }
+  | { kind: 'ready'; config: IRhinoConfig; source: string }
+  | { kind: 'error'; message: string };
 
-const RhinoGridApp: React.FC<IRhinoGridAppProps> = ({ sp, config, displayMode, onConfigSaved }) => {
-  const [items, setItems] = useState<IGridItem[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | undefined>();
-  const [filterState, setFilterState] = useState<IFilterState>({});
-  const [selectedItem, setSelectedItem] = useState<IGridItem | undefined>();
-  const [formMode, setFormMode] = useState<'add' | 'edit' | null>(null);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [listProvisioned, setListProvisioned] = useState(false);
-  const [checkingList, setCheckingList] = useState(false);
-  const [sortField, setSortField] = useState<string>('ID');
-  const [sortAsc, setSortAsc] = useState(true);
-  const [skip, setSkip] = useState(0);
-  const [hasMore, setHasMore] = useState(false);
-
-  const isReadMode = displayMode === DisplayMode.Read;
-
-  const dataService = useMemo(() => config ? new GridDataService(sp) : null, [sp, config?.listName]);
-  const setupService = useMemo(() => new ListSetupService(sp), [sp]);
+const RhinoGridApp: React.FC<IRhinoGridAppProps> = (props) => {
+  const { sp, store, configSource, configFileUrl, inlineJson, hideHeader, displayMode, designerUrl, onOpenPropertyPane, onPickConfigFile } = props;
+  const [state, setState] = useState<LoadState>({ kind: 'idle' });
+  const [files, setFiles] = useState<IStoredConfig[] | undefined>();
+  const isEdit = displayMode === DisplayMode.Edit;
 
   useEffect(() => {
-    if (config) {
-      setCheckingList(true);
-      setupService.listExists(config.listName)
-        .then(exists => setListProvisioned(exists))
-        .catch(() => setListProvisioned(false))
-        .finally(() => setCheckingList(false));
-    } else {
-      setListProvisioned(false);
-    }
-  }, [config?.listName]);
-
-  const loadItems = useCallback(async (currentSkip: number = 0) => {
-    if (!config || !dataService || !listProvisioned) return;
-    setLoading(true);
-    setError(undefined);
-    try {
-      const loaded = await dataService.getItems(
-        config.listName,
-        config.fields,
-        filterState,
-        sortField,
-        sortAsc,
-        PAGE_SIZE + 1,
-        currentSkip
-      );
-      const hasMoreItems = loaded.length > PAGE_SIZE;
-      const pageItems = hasMoreItems ? loaded.slice(0, PAGE_SIZE) : loaded;
-      if (currentSkip === 0) {
-        setItems(pageItems);
-      } else {
-        setItems(prev => [...prev, ...pageItems]);
+    let cancelled = false;
+    const run = async (): Promise<void> => {
+      if (configSource === 'inline') {
+        if (!inlineJson.trim()) { setState({ kind: 'idle' }); return; }
+        try {
+          setState({ kind: 'ready', config: parseConfig(inlineJson), source: 'inline JSON' });
+        } catch (e) {
+          setState({ kind: 'error', message: (e as Error).message });
+        }
+        return;
       }
-      setHasMore(hasMoreItems);
-    } catch (e) {
-      setError(`Failed to load items: ${e.message}`);
-    } finally {
-      setLoading(false);
-    }
-  }, [config, dataService, filterState, sortField, sortAsc, listProvisioned]);
+      if (!configFileUrl) { setState({ kind: 'idle' }); return; }
+      setState({ kind: 'loading' });
+      try {
+        const config = await store.load(configFileUrl);
+        if (!cancelled) setState({ kind: 'ready', config, source: configFileUrl.split('/').pop() || configFileUrl });
+      } catch (e) {
+        if (!cancelled) setState({ kind: 'error', message: `Could not load "${configFileUrl}": ${(e as Error).message}` });
+      }
+    };
+    void run();
+    return () => { cancelled = true; };
+  }, [store, configSource, configFileUrl, inlineJson]);
 
   useEffect(() => {
-    if (listProvisioned) {
-      setSkip(0);
-      void loadItems(0);
+    if (state.kind === 'idle' && isEdit && files === undefined) {
+      store.list().then(setFiles).catch(() => setFiles([]));
     }
-  }, [filterState, sortField, sortAsc, listProvisioned]);
+  }, [state.kind, isEdit, files, store]);
 
-  const handleFilterChange = (newState: IFilterState): void => {
-    setFilterState(newState);
-    setSkip(0);
-  };
+  if (state.kind === 'loading') {
+    return <div className={styles.center}><Spinner size={SpinnerSize.large} label="Loading configuration…" /></div>;
+  }
 
-  const handleSort = (field: string, ascending: boolean): void => {
-    setSortField(field);
-    setSortAsc(ascending);
-    setSkip(0);
-  };
-
-  const handleLoadMore = (): void => {
-    const newSkip = skip + PAGE_SIZE;
-    setSkip(newSkip);
-    void loadItems(newSkip);
-  };
-
-  const handleRefresh = (): void => {
-    setSkip(0);
-    void loadItems(0);
-  };
-
-  const handleConfigSaved = (json: string, listName: string): void => {
-    setListProvisioned(true);
-    onConfigSaved(json, listName);
-  };
-
-  const handleEditItem = (item: IGridItem): void => {
-    setSelectedItem(item);
-    setFormMode('edit');
-  };
-
-  const handleDeleteItem = (item: IGridItem): void => {
-    setSelectedItem(item);
-    setShowDeleteDialog(true);
-  };
-
-  const handleDeleteConfirm = async (): Promise<void> => {
-    if (!selectedItem || !config || !dataService) return;
-    try {
-      await dataService.deleteItem(config.listName, selectedItem.Id);
-      setShowDeleteDialog(false);
-      setSelectedItem(undefined);
-      setSkip(0);
-      void loadItems(0);
-    } catch (e) {
-      setError(`Failed to delete item: ${e.message}`);
-      setShowDeleteDialog(false);
-    }
-  };
-
-  if (checkingList) {
+  if (state.kind === 'error') {
     return (
-      <div className={styles.appContainer}>
-        <MessageBar>Checking SharePoint list status...</MessageBar>
+      <div className={styles.center}>
+        <MessageBar messageBarType={MessageBarType.error} isMultiline>
+          <strong>Rhino List could not read its configuration.</strong><br />{state.message}
+          {isEdit && <><br /><Link onClick={onOpenPropertyPane}>Open the web part settings</Link> to pick another config.</>}
+        </MessageBar>
       </div>
     );
   }
 
-  if (!config) {
-    if (isReadMode) {
-      return (
-        <div className={styles.appContainer}>
-          <div className={styles.readOnlyMessage}>
-            <MessageBar messageBarType={MessageBarType.info}>
-              This webpart needs to be configured. Edit the page and upload a JSON configuration file.
-            </MessageBar>
-          </div>
-        </div>
-      );
-    }
+  if (state.kind === 'idle') {
     return (
-      <div className={styles.appContainer}>
-        <ConfigSetup sp={sp} setupService={setupService} onConfigSaved={handleConfigSaved} />
+      <div className={styles.center}>
+        <div className={styles.setupCard}>
+          <div className={styles.setupIcon}>🦏</div>
+          <Text variant="xLarge" className={styles.setupTitle}>Rhino List needs a configuration</Text>
+          <Text variant="medium" className={styles.setupSub}>
+            Pick a config file created with the Rhino List Designer, or paste JSON in the web part settings.
+          </Text>
+          {isEdit ? (
+            <>
+              {files && files.length > 0 && (
+                <div className={styles.fileList}>
+                  {files.map(f => (
+                    <button key={f.serverRelativeUrl} type="button" className={styles.fileBtn} onClick={() => onPickConfigFile(f.serverRelativeUrl)}>
+                      <Icon iconName="Document" /> <span>{f.name.replace(/\.json$/i, '')}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+              {files && files.length === 0 && (
+                <MessageBar messageBarType={MessageBarType.info}>No config files yet. Add the Designer web part to a page to create one.</MessageBar>
+              )}
+              <div className={styles.setupActions}>
+                <PrimaryButton text="Web part settings" iconProps={{ iconName: 'Settings' }} onClick={onOpenPropertyPane} />
+                <DefaultButton text="Open Designer" iconProps={{ iconName: 'Design' }} href={designerUrl} target="_blank" />
+              </div>
+            </>
+          ) : (
+            <MessageBar messageBarType={MessageBarType.info}>Edit this page to configure the web part.</MessageBar>
+          )}
+        </div>
       </div>
     );
   }
 
-  if (!listProvisioned) {
-    if (isReadMode) {
-      return (
-        <div className={styles.appContainer}>
-          <div className={styles.readOnlyMessage}>
-            <MessageBar messageBarType={MessageBarType.warning}>
-              The SharePoint list &ldquo;{config.listName}&rdquo; has not been provisioned yet. Edit the page to provision it.
-            </MessageBar>
-          </div>
-        </div>
-      );
-    }
-    return (
-      <div className={styles.appContainer}>
-        <ConfigSetup sp={sp} setupService={setupService} existingConfig={config} onConfigSaved={handleConfigSaved} />
-      </div>
-    );
-  }
+  const headerExtra = isEdit ? (
+    <Link onClick={onOpenPropertyPane} className={styles.sourceLink} title={`Config: ${state.source}`}>
+      <Icon iconName="Settings" /> {state.source}
+    </Link>
+  ) : undefined;
 
-  const itemLabel = config.itemLabel || 'item';
-
-  return (
-    <div className={styles.appContainer}>
-      <div className={styles.card}>
-        <div className={styles.header}>
-          <div className={styles.headerIcon}>{config.icon || '🦏'}</div>
-          <div className={styles.headerText}>
-            <div className={styles.headerTitle}>{config.listName}</div>
-            {config.listDescription && (
-              <div className={styles.headerSubtitle}>{config.listDescription}</div>
-            )}
-          </div>
-        </div>
-
-        <DataGrid
-          items={items}
-          fields={config.fields}
-          loading={loading}
-          error={error}
-          onSort={handleSort}
-          onAdd={() => { setSelectedItem(undefined); setFormMode('add'); }}
-          onEditItem={handleEditItem}
-          onDeleteItem={handleDeleteItem}
-          onRefresh={handleRefresh}
-          hasMore={hasMore}
-          onLoadMore={handleLoadMore}
-          itemLabel={itemLabel}
-          filterBar={
-            <FilterBar
-              fields={config.fields}
-              filterState={filterState}
-              onFilterChange={handleFilterChange}
-            />
-          }
-        />
-      </div>
-
-      {formMode && (
-        <ItemForm
-          mode={formMode}
-          fields={config.fields}
-          item={formMode === 'edit' ? selectedItem : undefined}
-          listName={config.listName}
-          dataService={dataService!}
-          onSaved={() => { setFormMode(null); handleRefresh(); }}
-          onDismiss={() => setFormMode(null)}
-        />
-      )}
-
-      {showDeleteDialog && selectedItem && (
-        <DeleteConfirmDialog
-          itemTitle={String(selectedItem.Title || `Item #${selectedItem.Id}`)}
-          onConfirm={handleDeleteConfirm}
-          onDismiss={() => setShowDeleteDialog(false)}
-        />
-      )}
-    </div>
-  );
+  return <RhinoList sp={sp} config={state.config} hideHeader={hideHeader} headerExtra={headerExtra} />;
 };
 
 export default RhinoGridApp;
